@@ -1,0 +1,22 @@
+body {
+    background: linear-gradient(135deg, #565a69 0%, #69717d 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.device-card{
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+footer {
+    margin-top: auto;
+    width: 100%;
+}
