@@ -24,7 +24,7 @@
     </div>
 
     <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p class="mb-0">&copy; 2025 Wantam Home Contro System | Connected Devices: <span id="device-count">0</span></p>
+        <p class="mb-0">&copy; 2025 Wantam Home Control System | Connected Devices: <span id="device-count">0</span></p>
     </footer>
     <script>
         //javascript code
@@ -56,6 +56,92 @@
                 console.error('Error loading devices:', error);
             }
         }
+
+        function displayDevices(devices) {
+            const container = document.getElementById('devices-container')
+            container.innerHTML='';
+            let count = 0;
+
+            for (const[id, devices] of Object.entries(devices)) {
+                count ++
+                const card = createDeviceCard(id, devices);
+                container.innerHTML += card;
+            }
+
+            document.getElementById('device-count').textContent = count;
+        }
+
+        function createDeviceCard(id, device) {
+            const isOn = device.status === 'on' || device.status === 'unlocked';
+            const statusClass = isOn ? 'status-on' : 'status-off';
+            const icon = getFeviceIcon(device.type);
+
+            let controlHtml = '';
+            if (device.type === 'light' || device.type === 'tv' || device.type === 'fan'){
+                controlHtml = `
+                <button class="btn btn-sm ${isOn ? 'btn-danger' : 'btn-success'}"
+                        onclick="toggleDevice('${id}', '${isOn ? 'off' : 'on'}')">
+                    ${isOn ? 'Turn off' : 'Turn On'}
+                </button>`;           
+            } else if (device.type === 'door_lock') {
+                const locked = devices.status === 'locked';
+                controlHtml = `
+                 <button class="btn btn-sm ${isOn ? 'btn-warning' : 'btn-success'}"
+                        onclick="toggleDevice('${id}', '${locked ? 'unlocked' : 'locked'}')">
+                    ${isOn ? 'Unlock' : 'Lock'}
+                </button>`;                  
+            } else if (device.type === 'thermostat') {
+                const locked = devices.status === 'locked';
+                controlHtml = `
+                 <div class="input-group input-group-sm"?>
+                        <input type="number" class="form-control" id="${id}-temp" value="${device.status}" min="15" max="30">
+                        <button class="btn btn-primary" onclick="setTemperature('${id}')">Set</button>
+                </div>`;   
+        }
+
+        return `
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card device-card ${statusClass}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">
+                                <i class="bi ${icon}"></i> ${device.name}
+                            </5>
+                            <span class="badge bg-secondary">${device.type.replace('_', '')}</span>
+                        </div>
+                        <p class="status-text mb-3">
+                            Status: <strong>${device.status}</strong>
+                        </p>
+                        ${controlHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+        }
+
+        async function toggleDevice(deviceId, newStatus) {
+            try {
+                const response = await fetch(`${API_URL}/${deviceId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json'},
+                    body: JSON.stringify({ status: newStatus})
+                });
+
+                if (response.ok) {
+                    loadDevices();
+                }
+            } catch (error) {
+                console.error('Error toggling device:', error);
+            }
+        }
+
+        async function setTemperature(deviceId) {
+            const temp = document.getElementById(`${deviceId}-temp`).value;
+            await toggleDevice(deviceId, temp);
+        }
+
+        loadDevices();
+        setInterval(loadDevices, 5000);
     </script>
 </body>
 </html>

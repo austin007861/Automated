@@ -2,6 +2,8 @@ body {
     background: linear-gradient(135deg, #565a69 0%, #69717d 100%);
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar {
@@ -19,4 +21,58 @@ body {
 footer {
     margin-top: auto;
     width: 100%;
+}
+.device-card:hover{
+    transform: translate(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.status-on {
+    border-left: 5px solid #2dc8e3;
+}
+
+.status-off {
+    border-left: 5px solid #2dc8e3;
+}
+
+.status-text{
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.status-text strong{
+    text-transform: capitalize;
+    color: #333;
+}
+
+.card-title i {
+    font-size: 1.5rem;
+    margin-right: 8px;
+}
+
+.container.my-5 {
+    flex: 1;
+}
+
+.btn{
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover{
+    transform: scale(1.05);
+}
+
+.badge {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+}
+
+.input-group-sm .form-control {
+    border-radius: 20px 0 0 20px;
+}
+
+.input-group-sm .btn{
+    border-radius: 0 20px 20px 0;
 }
